@@ -106,6 +106,7 @@ public class EchoServer extends AbstractServer
 	        catch (IOException e) {}
 	        return;
 	      }
+
 	      System.out.println("Server received: " + msg + " from \"" + 
 	        client.getInfo("loginID") + "\" " + client);
 	      this.sendToAllClients(client.getInfo("loginID") + " > reqeste is being processed by the server: " + msg);
@@ -113,12 +114,11 @@ public class EchoServer extends AbstractServer
 		  Connection connection = null;
 		  Statement statement = null;
 		  try{
+			  /* RUNTIME ERROR*/
 			  Class.forName(JDBC_DRIVER);
 			  connection = DriverManager.getConnection(DB_URL, USER, PASS);
-			  System.out.println("here");
 			  statement = connection.createStatement();
-			  if(arguments[0] == "displayItems") {
-
+			  if(arguments[0].equalsIgnoreCase("displayItems")){
 				  String sql = "SELECT * FROM items";
 				  ResultSet rs = statement.executeQuery(sql);
 					while (rs.next()) {
