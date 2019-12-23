@@ -124,7 +124,7 @@ public class ChatClient extends AbstractClient
     	System.out.println("UI Commands\n"+"\t============");
     	System.out.println("displayItems");
     	System.out.println("PriceUpdate item_Id new_price");
-    	System.out.println("getUpdatedInfo item_Id");
+    	System.out.println("getUpdatedInfo");
     	System.out.println("\t============");
     }
     else if (message.equalsIgnoreCase("#quit"))

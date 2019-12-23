@@ -118,35 +118,40 @@ public class EchoServer extends AbstractServer
 			  Class.forName(JDBC_DRIVER);
 			  connection = DriverManager.getConnection(DB_URL, USER, PASS);
 			  statement = connection.createStatement();
+			  System.out.println(arguments[0]);
 			  if(arguments[0].equalsIgnoreCase("displayItems")){
 				  String sql = "SELECT * FROM items";
 				  ResultSet rs = statement.executeQuery(sql);
+				  this.sendToAllClients("\n====================\n");
+					this.sendToAllClients("ID  | Type |  Price\n");
 					while (rs.next()) {
 						int item_Id = rs.getInt("item_Id");
 						String item_type = rs.getString("item_type");
 						int item_price = rs.getInt("item_price");
-						 this.sendToAllClients("\t============\n");
-						 this.sendToAllClients("ID   Type   Price\n");
+						 this.sendToAllClients("--------------------\n");
 						 this.sendToAllClients(""+item_Id+" "+item_type+" "+item_price+"\n");
 					}
 					 rs.close();
-		      }else if(arguments[0] == "PriceUpdate") {
+		      }else if(arguments[0].equalsIgnoreCase("PriceUpdate")) {
 		    	       int item_price=Integer.parseInt(arguments[2]);
 		    	       int item_Id=Integer.parseInt(arguments[1]);
-						PreparedStatement updatePrice = connection.prepareStatement("UPDATE items SET item_price=? WHERE item_Id=?");
+						PreparedStatement updatePrice = connection.prepareStatement("UPDATE items SET item_price=? ,updated=? WHERE item_Id=?");
 						updatePrice.setInt(1,item_price);
-						updatePrice.setInt(2, item_Id);
+						updatePrice.setInt(2, 1);
+						updatePrice.setInt(3, item_Id);
 						updatePrice.executeUpdate();
 						this.sendToAllClients("Server Updated price in database for item:" + item_Id + " to:"+item_price+"\n");
-		      }else if(arguments[0] == "getUpdatedInfo") {
+		      }else if(arguments[0].equalsIgnoreCase("getUpdatedInfo")) {
 		    	  String sql = "SELECT * FROM items WHERE updated=1";
 				  ResultSet rs = statement.executeQuery(sql);
+				  this.sendToAllClients("\n====================\n");
+					 this.sendToAllClients("ID   Type   Price\n");
 					while (rs.next()) {
 						int item_Id = rs.getInt("item_Id");
 						String item_type = rs.getString("item_type");
 						int item_price = rs.getInt("item_price");
-						 this.sendToAllClients("\t============\n");
-						 this.sendToAllClients("ID   Type   Price\n");
+						this.sendToAllClients("--------------------\n");
+
 						 this.sendToAllClients(""+item_Id+" "+item_type+" "+item_price+"\n");
 					}
 					 rs.close();
